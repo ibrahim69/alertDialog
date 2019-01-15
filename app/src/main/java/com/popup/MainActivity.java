@@ -1,6 +1,9 @@
 package com.popup;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 //                txt_hasil.setText(null);
                 stringNumberAtas = "18";
                 bt18 = true;
+                bt17 = false;
                 DialogForm();
             }
         });
@@ -66,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 //                txt_hasil.setText(null);
                 stringNumberAtas = "17";
                 bt17 = true;
+                bt18 = false;
                 DialogForm();
             }
         });
@@ -73,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("InflateParams")
     private void DialogForm() {
         builder = new AlertDialog.Builder(MainActivity.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -162,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 kotak.setImageResource(R.drawable.ic_gigi_tengah_amf);
 
                 amf = true;
+                cof = false;
 
                 if(lylistgigiatas.getVisibility() == View.VISIBLE) {
                     lylistgigiatas.setVisibility(View.GONE);
@@ -175,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 kotak.setImageResource(R.drawable.ic_gigi_tengah_cof);
 
                 cof = true;
+                amf = false;
 
                 if(lylistgigiatas.getVisibility() == View.VISIBLE) {
                     lylistgigiatas.setVisibility(View.GONE);
@@ -208,25 +218,24 @@ public class MainActivity extends AppCompatActivity {
 //                    kotak17.setImageResource(R.drawable.ic_gigi_tengah_cof);
 //                }
 
-                if (bt18 == true) {
-                    if (amf == true) {
+                if (bt18) {
+                    if (amf) {
                         kotak18.setImageResource(R.drawable.ic_gigi_tengah_amf);
-                    } else if (cof == true) {
+                    } else if (cof) {
                         kotak18.setImageResource(R.drawable.ic_gigi_tengah_cof);
                     } else {
                         kotak18.setImageResource(R.drawable.ic_gigi_kotak_tengah);
                     }
-                }
-
-                if (bt17 == true) {
-                    if (amf == true) {
+                }else if (bt17) {
+                    if (amf) {
                         kotak17.setImageResource(R.drawable.ic_gigi_tengah_amf);
-                    } else if (cof == true) {
+                    } else if (cof) {
                         kotak17.setImageResource(R.drawable.ic_gigi_tengah_cof);
                     } else {
                         kotak17.setImageResource(R.drawable.ic_gigi_kotak_tengah);
                     }
-                }
+                }  //
+
 
                 dialog.dismiss();
             }
@@ -251,7 +260,9 @@ public class MainActivity extends AppCompatActivity {
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
 
         // Copy the alert dialog window attributes to new layout parameter instance
-        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            layoutParams.copyFrom(Objects.requireNonNull(dialog.getWindow()).getAttributes());
+        }
 
         // Set the width and height for the layout parameters
         // This will bet the width and height of alert dialog
@@ -259,6 +270,8 @@ public class MainActivity extends AppCompatActivity {
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
 
         // Apply the newly created layout parameters to the alert dialog window
-        dialog.getWindow().setAttributes(layoutParams);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(dialog.getWindow()).setAttributes(layoutParams);
+        }
     }
 }
